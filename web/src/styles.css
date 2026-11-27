@@ -506,3 +506,44 @@ section > .text-block {
     transition: none !important;
   }
 }
+
+.error-box {
+  margin-top: 14px;
+  border: 1px solid var(--err);
+  background: var(--err-soft);
+  border-radius: 6px;
+  padding: 10px 12px;
+  min-width: 0;
+}
+.error-box-title {
+  margin: 0 0 6px;
+  font-weight: 600;
+  color: var(--err);
+}
+.error-box ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+.error-box li {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  min-width: 0;
+}
+.error-box code {
+  display: block;
+  background: transparent;
+  padding: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.error-count {
+  flex: none;
+  font-weight: 600;
+  color: var(--err);
+  font-variant-numeric: tabular-nums;
+}

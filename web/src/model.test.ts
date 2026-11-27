@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  agentRunErrors,
   barPosition,
   buildTree,
   defaultExpanded,
@@ -108,4 +109,22 @@ test('formatDuration gives a short duration for people', () => {
 test('a run without its root opens its steps and keeps the agent runs closed', () => {
   const roots = buildTree(SPANS.filter((item) => item.spanId !== 'r'));
   assert.deepEqual([...defaultExpanded(roots)], ['s1']);
+});
+
+test('agentRunErrors counts each message of a failed agent run once, most frequent first', () => {
+  const failed = (id: string, message: string | null): Span => ({
+    ...span(id, 's1', 'picr.agent_run', 0, 1),
+    status: 'error',
+    statusMessage: message,
+  });
+  const errors = agentRunErrors([
+    failed('e1', 'HTTP 429'),
+    failed('e2', 'stream ended'),
+    failed('e3', 'HTTP 429'),
+    failed('e4', null),
+    span('ok', 's1', 'picr.agent_run', 0, 1),
+    { ...span('t', 'e1', 'picr.tool_call', 0, 1), status: 'error', statusMessage: 'not a file' },
+  ]);
+  assert.deepEqual(errors[0], { message: 'HTTP 429', count: 2 });
+  assert.equal(errors.length, 3);
 });

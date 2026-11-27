@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { getRun, getSpans } from './api.ts';
 import {
+  agentRunErrors,
   barPosition,
   buildTree,
   defaultExpanded,
@@ -55,6 +56,7 @@ function RunSummary({ run, spans }: { run: Run; spans: Span[] }) {
   const agentRuns = spans.filter((span) => span.name === 'picr.agent_run').length;
   const toolCalls = spans.filter((span) => span.name === 'picr.tool_call');
   const blocked = toolCalls.filter((span) => span.status === 'error').length;
+  const errors = agentRunErrors(spans);
   const items: [string, string][] = [
     ['專案 / MR', `${run.projectId ?? '–'} / ${run.mrIid === null ? '–' : `!${run.mrIid}`}`],
     ['模型', run.model ?? '–'],
@@ -79,9 +81,30 @@ function RunSummary({ run, spans }: { run: Run; spans: Span[] }) {
           </div>
         ))}
       </dl>
+      {errors.length > 0 && (
+        <div className="error-box">
+          <p className="error-box-title">失敗的 agent run（{errors.reduce((sum, item) => sum + item.count, 0)}）</p>
+          <ul>
+            {errors.slice(0, MAX_ERRORS_SHOWN).map((item) => (
+              <li key={item.message}>
+                {item.count > 1 && <span className="error-count">×{item.count}</span>}
+                <code>{item.message}</code>
+              </li>
+            ))}
+          </ul>
+          {errors.length > MAX_ERRORS_SHOWN && (
+            <p className="muted small">
+              還有 {errors.length - MAX_ERRORS_SHOWN} 種訊息，請在時間軸點開各個 agent run。
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 }
+
+/** The distinct error messages that the run page lists before the timeline. */
+const MAX_ERRORS_SHOWN = 5;
 
 function Timeline({ traceId, spans }: { traceId: string; spans: Span[] }) {
   const roots = useMemo(() => buildTree(spans), [spans]);

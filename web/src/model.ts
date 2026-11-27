@@ -159,6 +159,20 @@ export function spanLabel(span: Span): string {
   }
 }
 
+/** The error messages of the failed agent runs, the same message counted once,
+ * most frequent first. A run that failed shows its causes this way. */
+export function agentRunErrors(spans: readonly Span[]): { message: string; count: number }[] {
+  const counts = new Map<string, number>();
+  for (const span of spans) {
+    if (span.name !== 'picr.agent_run' || span.status !== 'error') continue;
+    const message = span.statusMessage ?? '（沒有錯誤訊息）';
+    counts.set(message, (counts.get(message) ?? 0) + 1);
+  }
+  return [...counts]
+    .map(([message, count]) => ({ message, count }))
+    .sort((a, b) => b.count - a.count || a.message.localeCompare(b.message));
+}
+
 /** A duration for people: `850 ms`, `12.4 s`, or `3 min 05 s`. */
 export function formatDuration(ms: number | null): string {
   if (ms === null || !Number.isFinite(ms)) return '–';

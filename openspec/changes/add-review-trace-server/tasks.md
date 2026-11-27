@@ -49,7 +49,7 @@
 ## 9. Check
 
 - [x] 9.1 Run `npm run build`, `npm test`, `npm run lint`, and `npm run format:check`. Verify that all pass.
-- [ ] 9.2 Start the service on this computer. Run pi-code-review `review` on a test merge request with `OTEL_EXPORTER_OTLP_ENDPOINT=http://127.0.0.1:4318`, only after the user approves it. Verify in the UI that the run is in the list, the timeline has the steps and agent runs, and an agent run page shows its prompts and tool calls.
+- [x] 9.2 Start the service on this computer. Run pi-code-review `review` on a test merge request with `OTEL_EXPORTER_OTLP_ENDPOINT=http://127.0.0.1:4318`, only after the user approves it. Verify in the UI that the run is in the list, the timeline has the steps and agent runs, and an agent run page shows its prompts and tool calls.
 - [ ] 9.3 Run `openspec-sync-specs` to create the main specs and the local `SPEC.md` files listed in the design. Ask the user to approve each `SPEC.md` first.
 
 Order: group 1 before all others, 2 before 3 to 5, 3.1 before 3.3 to 3.6, 5 before 7, and group 9 last.
@@ -59,3 +59,5 @@ Order: group 1 before all others, 2 before 3 to 5, 3.1 before 3.3 to 3.6, 5 befo
 - 3.1: the fixtures are in `src/testing/fixtures.ts`, not `test/fixtures.ts`, because every test file is under `src`.
 - 3.6 result (2026-11-27, Windows, in-memory database): one request of 512 `picr.tool_call` spans, each with a 100,000-character result (39.3 MB of JSON), was stored in 1,059 ms. The 512 texts take 5.58 MB after gzip.
 - 2.2: the span and event times are stored as decimal strings of nanoseconds (`start_ns TEXT`), because a nanosecond time is larger than the safe integer range of JavaScript. `texts` also has `span_id`, so a span that arrives again replaces its own texts.
+- 9.2 result (2026-11-27, approved by the user): `review` of MR 66 (project 10) with `OTEL_EXPORTER_OTLP_ENDPOINT=http://127.0.0.1:4318` failed after 59.9 s with `model_failed`: the model provider answered 429 (the free daily quota of the OpenRouter route was used up, and the other deployments were in cooldown). The service stored the trace: the run is in the list with the state `error`, the timeline shows `read_change`, 7 review agent runs of batch 1 with their retries, the discussion judgment step, and 25 host requests, and each failed agent run page shows its error message. The client wrote no export warning. A successful run with tool calls was checked with the example data of `src/testing/seed.ts`.
+- 9.2 change: the run page now lists the distinct error messages of the failed agent runs, and the agent run page shows its error in a full-width box, because the timeline alone did not show why a run failed.

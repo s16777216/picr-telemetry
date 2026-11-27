@@ -56,7 +56,7 @@ export function AgentPage({ traceId, spanId }: { traceId: string; spanId: string
     ['Batch', a['picr.batch'] === undefined || a['picr.batch'] === null ? '–' : String(a['picr.batch'])],
     ['第幾次嘗試', String(a['picr.try'] ?? '–')],
     ['耗時', formatDuration(nsToMs(agent.endNs) - nsToMs(agent.startNs))],
-    ['狀態', agent.status === 'error' ? `錯誤：${agent.statusMessage ?? ''}` : '正常'],
+    ['狀態', agent.status === 'error' ? '錯誤（見下方）' : '正常'],
   ];
 
   return (
@@ -78,6 +78,12 @@ export function AgentPage({ traceId, spanId }: { traceId: string; spanId: string
             </div>
           ))}
         </dl>
+        {agent.status === 'error' && (
+          <div className="error-box">
+            <p className="error-box-title">錯誤訊息</p>
+            <code>{agent.statusMessage ?? '（沒有錯誤訊息）'}</code>
+          </div>
+        )}
       </div>
 
       <h2>Prompt</h2>
