@@ -1,0 +1,41 @@
+{
+  "name": "picr-telemetry",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Receives the OpenTelemetry traces of pi-code-review review runs, stores them in SQLite, and shows them in a web UI",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json && tsc -p web/tsconfig.json && vite build",
+    "start": "node dist/server/main.js",
+    "dev": "tsx src/main.ts",
+    "test": "node --import tsx --test \"src/**/*.test.ts\" \"web/**/*.test.ts\"",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "@fastify/static": "10.1.11",
+    "better-sqlite3": "13.1.1",
+    "fastify": "5.12.8"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "@types/better-sqlite3": "9.6.0",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.3.0",
+    "eslint": "9.39.5",
+    "eslint-config-prettier": "10.1.8",
+    "prettier": "3.9.10",
+    "react": "19.1.10",
+    "react-dom": "19.1.10",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.72.1",
+    "vite": "8.3.8"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

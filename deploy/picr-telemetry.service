@@ -1,0 +1,27 @@
+# systemd unit for picr-telemetry. Copy to /etc/systemd/system/, then:
+#   sudo systemctl daemon-reload && sudo systemctl enable --now picr-telemetry
+[Unit]
+Description=picr-telemetry (receives and shows the traces of pi-code-review)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=picr
+Group=picr
+WorkingDirectory=/opt/picr-telemetry
+ExecStart=/usr/bin/node /opt/picr-telemetry/dist/server/main.js
+Environment=NODE_ENV=production
+Environment=HOST=0.0.0.0
+Environment=INGEST_PORT=4318
+Environment=UI_PORT=8080
+Environment=DATABASE_PATH=/var/lib/picr-telemetry/picr-telemetry.sqlite
+Environment=RETENTION_DAYS=90
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/picr-telemetry
+
+[Install]
+WantedBy=multi-user.target
