@@ -2,7 +2,7 @@
 
 接收 [pi-code-review](https://github.com/s16777216/pi-code-review)（`picr`）送出的 OpenTelemetry trace，存進 SQLite，並提供給團隊看的 web UI。目前只處理 `review` 的 trace。
 
-設計：[docs/design.md](docs/design.md)
+設計：[docs/design.md](docs/design.md)　部署：[docs/deploy.md](docs/deploy.md)
 
 ## 讓 CLI 送資料到這裡
 

@@ -1,8 +1,10 @@
 # Verification
 
-## <project-or-module-name>
+## picr-telemetry
 
 ```bash
-# Add project-specific lint, typecheck, or test commands (e.g. npm test / cargo test)
+npm run build
 npm test
+npm run lint
+npm run format:check
 ```
