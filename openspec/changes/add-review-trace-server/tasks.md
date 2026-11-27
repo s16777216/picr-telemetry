@@ -50,7 +50,7 @@
 
 - [x] 9.1 Run `npm run build`, `npm test`, `npm run lint`, and `npm run format:check`. Verify that all pass.
 - [x] 9.2 Start the service on this computer. Run pi-code-review `review` on a test merge request with `OTEL_EXPORTER_OTLP_ENDPOINT=http://127.0.0.1:4318`, only after the user approves it. Verify in the UI that the run is in the list, the timeline has the steps and agent runs, and an agent run page shows its prompts and tool calls.
-- [ ] 9.3 Run `openspec-sync-specs` to create the main specs and the local `SPEC.md` files listed in the design. Ask the user to approve each `SPEC.md` first.
+- [x] 9.3 Run `openspec-sync-specs` to create the main specs and the local `SPEC.md` files listed in the design. Ask the user to approve each `SPEC.md` first.
 
 Order: group 1 before all others, 2 before 3 to 5, 3.1 before 3.3 to 3.6, 5 before 7, and group 9 last.
 
